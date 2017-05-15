@@ -6,7 +6,6 @@ const gulp = require('gulp'),
       concat = require('gulp-concat'),
       imagemin = require('gulp-imagemin'),
       rename = require('gulp-rename'),
-      cp = require('child_process'),
       notify = require('gulp-notify'),
       cache = require('gulp-cache'),
       browserSync = require('browser-sync');
@@ -18,9 +17,11 @@ const postcss = require('gulp-postcss'),
       alias = require('postcss-alias'),
       corepostcss = require('postcss'),
       autoprefixer = require('autoprefixer'),
-      mixins = require('postcss-mixins'),
-      each = require('postcss-each'),
-      nestedcss = require('postcss-nested'),
+      // mixins = require('postcss-mixins'),
+      // each = require('postcss-each'),
+      // nestedcss = require('postcss-nested'),
+      cssnext = required('postcss-cssnext'),
+      precss = required('precss'),
       simplevars = require('postcss-simple-vars'),
       lost = require('lost'); // Flexbox and Masonry framework
 
@@ -91,7 +92,7 @@ gulp.task('browser-sync', function() {
 
 // Clean the mess
 gulp.task('clean', function() {
-  return gulp.src(['./srr/css', './src/js', './src/img'], {read: false})
+  return gulp.src(['./src/css', './src/js', './src/img'], {read: false})
     .pipe(clean());
 });
 
@@ -99,16 +100,18 @@ gulp.task('clean', function() {
 gulp.task('watch', function () =>
 
    // Watch css files
-   gulp.watch('/**/*.css', ['css', browserSync.reload]);
+   gulp.watch('./dev/css/\*.scss', ['css', browserSync.reload]);
 
    // Watch Js files
-   gulp.watch(['js/**/*.js', 'main.js'], [ 'scripts', browserSync.reload]);
+   gulp.watch(['./dev/js/\*.js', 'main.js'], [ 'scripts', browserSync.reload]);
 
    // Watch Images files
-   gulp.watch('img/**/*', ['images']);
+   gulp.watch('./dev/assets/img/**/*', ['images']);
+
+   // Watch any files in dest, reload on change
+   gulp.watch("*.html", browserSync.reload);
 
 );
-
 
 //Run tasks
 gulp.task('default', ['browser-sync', 'watch']);
